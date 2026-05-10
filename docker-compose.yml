@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: padelbooking-postgres
+    environment:
+      POSTGRES_DB: padelbookingdb
+      POSTGRES_USER: padeluser
+      POSTGRES_PASSWORD: padelpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - padelbooking_postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: padelbooking-api
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/padelbookingdb
+      SPRING_DATASOURCE_USERNAME: padeluser
+      SPRING_DATASOURCE_PASSWORD: padelpass
+      SPRING_DATASOURCE_DRIVER: org.postgresql.Driver
+    ports:
+      - "8080:8080"
+
+volumes:
+  padelbooking_postgres_data:

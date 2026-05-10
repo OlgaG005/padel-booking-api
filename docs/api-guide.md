@@ -144,3 +144,36 @@ Password:
 admin123
 
 eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBwYWRlbGJvb2tpbmcuY29tIiwiaWF0IjoxNzc4NDI0MjI2LCJleHAiOjE3Nzg1MTA2MjZ9.AVcKR8vLSxG80O9Qfn4fdGua6L966jfAqnwUfjV_2_y8CUP81QNYpl95A0skbguk
+
+Running with Docker
+-------------------
+
+Build the application jar:
+
+./mvnw clean package
+
+Start the application and PostgreSQL database:
+
+docker compose up --build
+
+The API will be available at:
+
+http://localhost:8080
+
+Swagger UI:
+
+http://localhost:8080/swagger-ui.html
+
+PostgreSQL is started automatically by Docker Compose.
+
+Database connection:
+
+Host: localhost
+Port: 5432
+Database: padelbookingdb
+Username: padeluser
+Password: padelpass
+
+Stop the containers:
+
+docker compose down

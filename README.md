@@ -47,6 +47,9 @@ administrators can manage courts and cancel any booking in the system.
 - JWT
 - OpenAPI / Swagger
 - Maven
+- PostgreSQL
+- Docker
+- Docker Compose
 
 ---
 
@@ -197,5 +200,56 @@ DELETE /api/bookings/{id}
 ### Check Court Availability
 
 GET /api/bookings/availability
+
+---
+
+## Running with Docker
+
+Build the application jar:
+
+
+./mvnw clean package
+
+
+Start the application and PostgreSQL database:
+
+
+docker compose up --build
+
+
+The API will be available at:
+
+
+http://localhost:8080
+
+
+Swagger UI:
+
+
+http://localhost:8080/swagger-ui.html
+
+
+PostgreSQL is started automatically by Docker Compose.
+
+## Database connection:
+
+
+Host: localhost
+
+Port: 5432
+
+Database: padelbookingdb
+
+Username: padeluser
+
+Password: padelpass
+
+
+
+
+## Stop the containers:
+
+
+docker compose down
 
 

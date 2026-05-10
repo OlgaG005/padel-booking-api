@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.example.padelbooking.exception.ConflictException;
+import com.example.padelbooking.exception.ForbiddenActionException;
+import com.example.padelbooking.exception.ResourceNotFoundException;
 
 import java.time.Duration;
 import java.util.List;
@@ -29,7 +32,7 @@ public class BookingService {
         User user = getCurrentUser();
 
         Court court = courtRepository.findById(request.getCourtId())
-                .orElseThrow(() -> new RuntimeException("Court not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Court not found"));
 
         validateBookingDuration(request);
 
@@ -41,7 +44,7 @@ public class BookingService {
                 );
 
         if (!overlappingBookings.isEmpty()) {
-            throw new RuntimeException("Court is already booked for this time slot");
+            throw new ConflictException("Court is already booked for this time slot");
         }
 
         Booking booking = Booking.builder()
@@ -76,7 +79,7 @@ public class BookingService {
         User currentUser = getCurrentUser();
 
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         boolean isAdmin =
                 currentUser.getRole().name().equals("ADMIN");
@@ -85,7 +88,7 @@ public class BookingService {
                 booking.getUser().getId().equals(currentUser.getId());
 
         if (!isAdmin && !isOwner) {
-            throw new RuntimeException("You cannot cancel this booking");
+            throw new ForbiddenActionException("You cannot cancel this booking");
         }
 
         booking.setStatus(BookingStatus.CANCELLED);
@@ -117,7 +120,7 @@ public class BookingService {
                 .getName();
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
     public List<CourtAvailabilityResponse> getAvailability(LocalDate date) {
 
